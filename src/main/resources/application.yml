@@ -1,5 +1,5 @@
 server:
-  port: 8080 #puerto donde corre tu API
+  port: 8080
 
 spring:
   datasource:
@@ -10,23 +10,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate # Hibernate valida, no crea tablas (Flyway las crea)
-    show-sql: true # Muestra queries en consola
+      ddl-auto: validate
+    show-sql: true
     properties:
       hibernate:
-        format-sql: true # Para ver las queries más legibles
+        format-sql: true
 
   flyway:
     enabled: true
     baseline-on-migrate: true
-    locations: classpath:db/migration # Carpeta de migraciones
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: debug
-        type:
-          descriptor:
-            sql:
-              BasicBinder: trace
+    locations: classpath:db/migration
