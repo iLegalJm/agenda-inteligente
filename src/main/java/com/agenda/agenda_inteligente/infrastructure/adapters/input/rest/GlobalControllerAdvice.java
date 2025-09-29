@@ -69,13 +69,11 @@ public class GlobalControllerAdvice {
     // ERRORES NO CONTROLADOS
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public ErrorResponse handleGenericException(Exception ex) {
-        return ErrorResponse.builder()
-                .code(CatalogueErrors.ERROR_GENERICO.getCode())
-                .message(CatalogueErrors.ERROR_GENERICO.getMessage())
-                .detail(Collections.singletonList(ex.getMessage()).toString())
-                .timestamp(LocalDateTime.now())
-                .build();
+    public ApiResponse<Object> handleAllUncaughtException(Exception exception) {
+        return new ApiResponse<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                CatalogueErrors.ERROR_GENERICO.getMessage(),
+                Collections.singletonList(exception.getMessage()));
     }
 
 }
