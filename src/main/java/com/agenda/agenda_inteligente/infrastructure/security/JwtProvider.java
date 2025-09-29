@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -15,7 +16,6 @@ import java.util.Date;
 public class JwtProvider {
     // Implementación del proveedor de JWT
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long expirationMs = 3600000; // 1 hora
 
     /**
      * Genera un token JWT para el correo electrónico y rol especificados.
@@ -25,7 +25,7 @@ public class JwtProvider {
      * @return un token JWT firmado que contiene el correo electrónico y el rol del
      *         usuario como claims
      */
-    public String generarToken(String email, String rol) {
+    public String generarToken(String email, String rol, long expirationMs) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("rol", rol)
@@ -55,6 +55,19 @@ public class JwtProvider {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
+    }
+
+    public boolean esTokenValido(String token) {
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            // Token inválido o expirado
+            return false;
+        }
     }
 
     public String getEmail(String token) {
