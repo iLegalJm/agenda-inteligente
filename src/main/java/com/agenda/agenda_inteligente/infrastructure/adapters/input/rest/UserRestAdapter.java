@@ -45,22 +45,16 @@ public class UserRestAdapter {
 
         @PostMapping("/login")
         public ResponseEntity<ApiResponse<TokenResponse>> login(@Valid @RequestBody LoginRequest loginRequest) {
-                try {
-                        Map<String, String> tokens = servicePort.login(loginRequest.getEmail(),
-                                        loginRequest.getPassword());
+                Map<String, String> tokens = servicePort.login(loginRequest.getEmail(),
+                                loginRequest.getPassword());
 
-                        TokenResponse response = TokenResponse.builder()
-                                        .accessToken(tokens.get("accessToken"))
-                                        .refreshToken(tokens.get("refreshToken"))
-                                        .build();
+                TokenResponse response = TokenResponse.builder()
+                                .accessToken(tokens.get("accessToken"))
+                                .refreshToken(tokens.get("refreshToken"))
+                                .build();
 
-                        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
-                                        "Login exitoso", response));
-                } catch (Exception e) {
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                                        .body(new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(),
-                                                        "Error al iniciar sesión: " + e.getMessage(), null));
-                }
+                return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK.value(),
+                                "Login exitoso", response));
         }
 
         @PostMapping("/refresh")
