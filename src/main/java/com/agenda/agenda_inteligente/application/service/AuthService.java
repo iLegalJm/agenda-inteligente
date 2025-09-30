@@ -79,4 +79,9 @@ public class AuthService implements AuthServicePort {
     public void logout(String refreshToken) {
         refreshTokenPersistencePort.revoke(refreshToken);
     }
+
+    // @Override
+    // public User getAuthenticaUser() {
+    //     Object principal = jwtService.
+    // }
 }
