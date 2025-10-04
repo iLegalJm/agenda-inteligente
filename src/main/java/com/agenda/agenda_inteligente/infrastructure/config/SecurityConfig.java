@@ -28,9 +28,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(cors -> {
+                })
                 .authorizeHttpRequests(auth -> auth
+                        // Endpoints públicos (sin autenticación requerida)
                         .requestMatchers("/api/auth/**").permitAll()
+
+                        // OPCIÓN A: Si quieres que /patient/** sea público (para testing)
+                        // .requestMatchers("/patient/**").permitAll()
+
+                        // OPCIÓN B: Si quieres que /patient/** requiera JWT (más seguro)
+                        .requestMatchers("/patient/**").authenticated()
+
+                        // Todo lo demás requiere autenticación
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
