@@ -1,7 +1,6 @@
 package com.agenda.agenda_inteligente.infrastructure.adapters.input.rest;
 
 import java.nio.file.AccessDeniedException;
-import java.time.LocalDateTime;
 import java.util.Collections;
 
 import org.springframework.http.HttpStatus;
@@ -70,6 +69,8 @@ public class GlobalControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ApiResponse<Object> handleAllUncaughtException(Exception exception) {
+        System.err.println("❌ ERROR GLOBAL: " + exception.getClass().getName());
+        exception.printStackTrace();
         return new ApiResponse<>(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 CatalogueErrors.ERROR_GENERICO.getMessage(),
